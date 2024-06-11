@@ -6,10 +6,13 @@ dashboard "aws_ec2_ami_dashboard" {
       title = "AMI Details"
       sql = <<EOQ
         select
-          'State' as label,
-          initcap(state) as value
+          name as label,
+          image_id as value,
+          json_build_object('account_id', account_id, 'region', region) as tags
         from
           aws_ec2_ami
+        order by
+          title;
       EOQ
     }
   }
