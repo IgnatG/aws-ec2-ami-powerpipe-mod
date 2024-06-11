@@ -9,9 +9,12 @@ dashboard "aws_ec2_ami_dashboard" {
           SELECT
             image_id,
             name,
-            state,
             owner_id,
-            creation_date
+            creation_date,
+            architecture,
+            hypervisor,
+            public,
+            platform
           FROM
             aws_ec2_ami
         ),
@@ -26,9 +29,12 @@ dashboard "aws_ec2_ami_dashboard" {
         SELECT
           a.image_id AS "AMI ID",
           a.name AS "AMI Name",
-          a.state AS "AMI State",
           a.owner_id AS "Owner ID",
           a.creation_date AS "Creation Date",
+          a.architecture AS "Architecture",
+          a.hypervisor AS "Hypervisor",
+          a.public AS "Public",
+          a.platform AS "Platform",
           CASE
             WHEN iu.image_id IS NOT NULL THEN 'Yes'
             ELSE 'No'
