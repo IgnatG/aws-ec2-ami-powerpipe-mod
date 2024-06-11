@@ -5,14 +5,14 @@ dashboard "aws_ec2_ami_dashboard" {
     table {
       title = "AMI Details"
       sql = <<EOQ
-        select
-          name as label,
-          image_id as value,
-          json_build_object('account_id', account_id, 'region', region) as tags
-        from
+        SELECT
+          name AS label,
+          image_id AS value,
+          json_build_object('account_id', account_id, 'region', region) AS tags
+        FROM
           aws_ec2_ami
-        order by
-          title;
+        ORDER BY
+          name;
       EOQ
     }
   }
