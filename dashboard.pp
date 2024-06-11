@@ -1,4 +1,4 @@
-dashboard "AWS EC2 AMI Details" {
+dashboard "aws_ec2_ami_dashboard" {
   title = "AWS EC2 AMI Details Dashboard"
 
   container {
