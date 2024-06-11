@@ -5,46 +5,16 @@ dashboard "aws_ec2_ami_dashboard" {
     table {
       title = "AMI Details"
       sql = <<EOQ
-        WITH amis AS (
-          SELECT
-            image_id,
-            name,
-            owner_id,
-            creation_date,
-            architecture,
-            hypervisor,
-            public,
-            platform
-          FROM
-            aws_ec2_ami
-        ),
-        in_use_amis AS (
-          SELECT
-            DISTINCT image_id
-          FROM
-            aws_ec2_instance
-          WHERE
-            state IN ('running', 'pending', 'stopping', 'stopped')
-        )
-        SELECT
-          a.image_id AS "AMI ID",
-          a.name AS "AMI Name",
-          a.owner_id AS "Owner ID",
-          a.creation_date AS "Creation Date",
-          a.architecture AS "Architecture",
-          a.hypervisor AS "Hypervisor",
-          a.public AS "Public",
-          a.platform AS "Platform",
-          CASE
-            WHEN iu.image_id IS NOT NULL THEN 'Yes'
-            ELSE 'No'
-          END AS "In Use"
-        FROM
-          amis a
-          LEFT JOIN in_use_amis iu
-          ON a.image_id = iu.image_id
-        ORDER BY
-          a.creation_date DESC;
+        select
+          instance_id,
+          instance_state,
+          launch_time,
+          state_transition_time
+        from
+          aws_ec2_instance
+        where
+          instance_state = 'stopped'
+          and state_transition_time <= (current_date - interval '30' day);
       EOQ
     }
   }
